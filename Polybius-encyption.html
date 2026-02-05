@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Keyword Polybius Cipher</title>
+  <style>
+    body {
+      font-family: monospace;
+      max-width: 700px;
+      margin: 40px auto;
+      background: #111;
+      color: #eee;
+    }
+    input, textarea, button {
+      width: 100%;
+      margin: 8px 0;
+      padding: 8px;
+      background: #222;
+      color: #eee;
+      border: 1px solid #444;
+    }
+    button {
+      cursor: pointer;
+    }
+    pre {
+      background: #000;
+      padding: 10px;
+      border: 1px solid #333;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Keyword Polybius Cipher</h1>
+
+<label>Keyword</label>
+<input id="keyword" placeholder="ROMA">
+
+<label>Plaintext</label>
+<textarea id="plaintext" rows="4" placeholder="ROME WAS NOT BUILT IN A DAY"></textarea>
+
+<button onclick="encrypt()">Encrypt</button>
+
+<label>Ciphertext</label>
+<textarea id="ciphertext" rows="4" placeholder="11 12 13 23"></textarea>
+
+<button onclick="decrypt()">Decrypt</button>
+
+<h2>Polybius Square</h2>
+<pre id="square"></pre>
+
+<script>
+function buildSquare(keyword) {
+  keyword = keyword.toUpperCase().replace(/J/g, "I").replace(/[^A-Z]/g, "");
+  let seen = new Set();
+  let letters = [];
+
+  for (let c of keyword) {
+    if (!seen.has(c)) {
+      seen.add(c);
+      letters.push(c);
+    }
+  }
+
+  for (let i = 65; i <= 90; i++) {
+    let c = String.fromCharCode(i);
+    if (c === "J") continue;
+    if (!seen.has(c)) letters.push(c);
+  }
+
+  let square = {};
+  let reverse = {};
+  let display = "";
+  let index = 0;
+
+  for (let r = 1; r <= 5; r++) {
+    for (let c = 1; c <= 5; c++) {
+      let letter = letters[index++];
+      square[letter] = `${r}${c}`;
+      reverse[`${r}${c}`] = letter;
+      display += letter + " ";
+    }
+    display += "\n";
+  }
+
+  document.getElementById("square").textContent = display;
+  return { square, reverse };
+}
+
+function encrypt() {
+  let keyword = document.getElementById("keyword").value;
+  let text = document.getElementById("plaintext").value.toUpperCase().replace(/J/g, "I");
+
+  let { square } = buildSquare(keyword);
+  let result = [];
+
+  for (let c of text) {
+    if (square[c]) result.push(square[c]);
+  }
+
+  document.getElementById("ciphertext").value = result.join(" ");
+}
+
+function decrypt() {
+  let keyword = document.getElementById("keyword").value;
+  let text = document.getElementById("ciphertext").value.trim();
+
+  let { reverse } = buildSquare(keyword);
+  let result = "";
+
+  let pairs = text.split(/\s+/);
+
+  for (let p of pairs) {
+    if (reverse[p]) result += reverse[p];
+  }
+
+  document.getElementById("plaintext").value = result;
+}
+</script>
+
+</body>
+</html>
