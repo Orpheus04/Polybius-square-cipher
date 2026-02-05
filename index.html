@@ -2,31 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Keyword Polybius Cipher</title>
   <style>
+    
     body {
       font-family: monospace;
       max-width: 700px;
       margin: 40px auto;
       background: #111;
       color: #eee;
+      padding: 16px;
     }
+    
     input, textarea, button {
       width: 100%;
       margin: 8px 0;
-      padding: 8px;
+      padding: 12px;
       background: #222;
       color: #eee;
       border: 1px solid #444;
+      font-size: 16px;
     }
+    
     button {
       cursor: pointer;
+      min-height: 44px;
+      touch-action: mmanipulation;
+      user-select: none;
     }
+    
+    textarea {
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+
     pre {
       background: #000;
       padding: 10px;
       border: 1px solid #333;
+      overflow-x: auto;
+      font-size: 14px;
     }
+    
   </style>
 </head>
 <body>
@@ -120,3 +138,4 @@ function decrypt() {
 
 </body>
 </html>
+
